@@ -1,34 +1,40 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.Scanner;
 
 public class FileFixer
 {
     public static void main(String[] args)
     {
-        File myFile = new File("Mancala lines.txt");
+        File myFile = new File("Forceable-Wins_capture-mode_Mancala.txt");
         try {
-            Scanner fileScanner = new Scanner(myFile);
-            while (fileScanner.hasNextLine())
+            FileWriter f = new FileWriter("AnotherNew.txt");
+            BufferedReader br = new BufferedReader(new FileReader("Forceable-Wins_capture-mode_Mancala.txt"));
+            String line;
+            while((line=br.readLine())!=null)
             {
-                String currentString = fileScanner.nextLine();
-                String front = currentString.substring(0, currentString.indexOf(';'));
-                String middle = currentString.substring(currentString.indexOf(';') + 1);
-                int score = Integer.parseInt(middle.substring(0,middle.indexOf(';')));
-                int p1 = (score + 48) / 2;
-                int p2 = 48 - p1;
-                String newMiddle = p1 + "," + p2;
-                String back = middle.substring(middle.indexOf(';'));
-                StringBuilder newfront = new StringBuilder();
-                while (front.length() > 0)
+                String front = line.substring(0, line.indexOf(';'));
+                String middle = line.substring(line.indexOf(';') + 1);
+                String back = middle.substring(middle.indexOf(";") + 1);
+                String player = middle.substring(0, middle.indexOf(";"));
+                int relativeScore = Integer.parseInt(back);
+                int winningPlayer = Integer.parseInt(player);
+                int p1Score;
+                int p2Score;
+                if (winningPlayer == 1)
                 {
-                    newfront.append(front.substring(0, 2)).append(",");
-                    front = front.substring(2, front.length());
+                    p1Score = (relativeScore + 48) / 2;
+                    p2Score = 48 - p1Score;
                 }
-                newfront.deleteCharAt(newfront.length() - 1);
-                System.out.println(newfront + ";" + newMiddle + back);
+                else
+                {
+                    p2Score = (relativeScore = 48) / 2;
+                    p1Score = 48 - p2Score;
+                }
+                System.out.println(front + ";" + player + ";" + p1Score + "," + p2Score);
+                f.write(front + ";" + player + ";" + p1Score + "," + p2Score + "\n");
+//                System.out.println(player + ", " + back);
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

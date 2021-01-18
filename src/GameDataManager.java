@@ -52,6 +52,7 @@ public class GameDataManager
         if (! knownDeterminedLines.containsKey(moveString))
         {
             knownDeterminedLines.put(moveString, new GameInfo(winningPlayer, winningPlayersScore));
+            increaseNumDiscovered();
         }
     }
 

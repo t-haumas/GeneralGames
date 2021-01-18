@@ -3,7 +3,7 @@ Ask for types and names of players: false
 Print the game and info as it is played: true
 Print movestring after games are finished: true
 Play a sound after moves are made: false
-Show engine recommendations: true
-Engine depth: 12
+Show engine recommendations: false
+Engine depth: 9
 Show lines helper during games: true
-Player configuration: human, P1, minimax, 12
+Player configuration: minimax, 12, minimax, 10

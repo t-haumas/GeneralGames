@@ -94,8 +94,16 @@ public class Minimaxer
 				} else {
 					MinimaxResult nextResult = minimaxDepthLimit(trialGame, myDepth);
 					currentScore = nextResult.getScore();
-					certain = nextResult.getCertainty();
+					if (! nextResult.getCertainty())
+					{
+						certain = false;
+					}
 				}
+			}
+
+			if (currentScore % 2 != 0 && certain)
+			{
+				System.err.println("oh no");
 			}
 
 			// Update extreme score
@@ -120,7 +128,6 @@ public class Minimaxer
 		if (certain && extremeScore > 0)
 		{
 			dataManager.saveDeterminedLine(gamePlaying.getMoveString(), optimizingPlayer, extremeScore);
-			dataManager.increaseNumDiscovered();
 		}
 		return new MinimaxResult(extremeMove, extremeScore, certain);
 	}

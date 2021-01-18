@@ -66,6 +66,7 @@ public class FileManager
                 int knownEndgameWinningScore = lineScanner.nextInt();
                 dataManager.saveDeterminedLine(knownEndgameMovestring, knownEndgameWinningPlayer, knownEndgameWinningScore);
             }
+            dataManager.resetNumDiscovered();
         }
         catch (FileNotFoundException e)
         {
