@@ -24,7 +24,6 @@ public abstract class Game implements Cloneable
 		this.moveStringBuilder = new StringBuilder(moveStringBuilder);
 	}
 
-	//TODO: add restart() method?
 	//TODO: add getpreviousplayer() method?
 
 	/**
@@ -178,7 +177,7 @@ public abstract class Game implements Cloneable
 	{
 		String moveString;
 		try {
-			moveString = moveStringBuilder.toString().substring(0, moveStringBuilder.length() - 1);
+			moveString = moveStringBuilder.substring(0, moveStringBuilder.length() - 1);
 		}
 		catch (IndexOutOfBoundsException e)
 		{

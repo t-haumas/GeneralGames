@@ -3,7 +3,6 @@ import java.util.List;
 
 public class Mancala extends Game
 {
-//TODO: fix it so ppl can't put stones in the opponent's mancala. Wow.
     private static final int[] blank14 = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private static final int TOTAL_BOARD_SPACES = 14;
     private static final int INITIAL_SPACE_DENSITY = 4;

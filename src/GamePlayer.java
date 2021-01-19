@@ -1,10 +1,8 @@
 public class GamePlayer
 { //TODO: make chess and maybe checkers.
-	//TODO: clean up minimax thing.
 	//TODO: make an engine that shows all available lines and their ratings.
 	//TODO: create a trainer?
 	//TODO: create an analysis engine?
-	//TODO: make a gui!
 	public static void main(String[] args)
 	{
 //		if (args.length != 1)
@@ -15,7 +13,7 @@ public class GamePlayer
 //		String filepath = args[0];
 //		Game myGame = new Chopsticks(2, false);
 //		Game myGame = new Mancala(new int[]{4, 4, 0, 0, 6, 1, 3, 1, 2, 7, 7, 6, 6, 1}, 2);
-		Game myGame = new Gomoku(5, 4);
+		Game myGame = new Gomoku(7, 6);
 
 		GameManager gameManager = new GameManager(myGame);
 
@@ -30,7 +28,7 @@ public class GamePlayer
 //				gamePlayManager.setGame(new Mancala(new int[]{4, 4, 0, 0, 6, 1, 3, 1, 2, 7, 7, 6, 6, 1}, 2), "A3,A6,B2,B1,A4,");
 
 
-//////		//TODO: Every A after the b4 near the end.
+//////		//T ODO: Every A after the b4 near the end.
 //////		String[] moves = new String[]{"A3", "A6", "B2", "B1", "A5", "B1", "A1", "B3", "A1", "B6", "A1", "B4", "A1"};
 //////		for (String move : moves)
 //////		{

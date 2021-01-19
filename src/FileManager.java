@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.*;
-//TODO: delete tictactoe, make file names include number of players.
+
 public class FileManager
 {
     private final String configFilePath;
@@ -24,12 +24,13 @@ public class FileManager
 
     private ArrayList<Player> players;
 
-    public FileManager(String gameName, GameDataManager dataManager, GameManager mainManager)
+    public FileManager(Game game, GameDataManager dataManager, GameManager mainManager)
     {
+        String gameString = game.getNumPlayers() + "-player_" + game.getName();
         this.dataManager = dataManager;
         this.mainManager = mainManager;
-        this.configFilePath = "GamePlayerConfig.txt";
-        this.winsFilePath = "Forceable-Wins_" + gameName.replace(' ', '_') + ".txt";
+        this.configFilePath = "Game Files/GamePlayerConfig.txt";
+        this.winsFilePath = "Game Files/Determined Lines/Determined-Lines_" + gameString.replace(' ', '_') + ".txt";
 
         initializeValues();
 
@@ -273,6 +274,7 @@ public class FileManager
 
     public void initialize()
     {
+        boolean mkdirs = new File("./Game Files/Determined Lines").mkdirs();
         readAndApplyConfig();
         getForceableWinPositionsFromFile();
 

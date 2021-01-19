@@ -14,7 +14,7 @@ public class GameManager
     {
         this.game = game;
         gameDataManager = new GameDataManager(this);
-        fileManager = new FileManager(game.getName(), gameDataManager, this);
+        fileManager = new FileManager(game.clone(), gameDataManager, this);
         gamePlayManager = new GamePlayManager(game, fileManager, gameDataManager);
         guiManager = new GUIManager(game, this);
         initialized = false;

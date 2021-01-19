@@ -1,9 +1,0 @@
-***Use lowercase true and false. Example for player configuration: minimax, 6, human, Tom***
-Ask for types and names of players: false
-Print the game and info as it is played: true
-Print movestring after games are finished: true
-Play a sound after moves are made: true
-Show engine recommendations: false
-Engine depth: 9
-Show lines helper during games: true
-Player configuration: minimax, 7, minimax, 7

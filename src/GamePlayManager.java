@@ -10,8 +10,6 @@ public class GamePlayManager
 
 	public GamePlayManager(Game g, FileManager fileManager, GameDataManager dataManager)
 	{
-		//TODO: maybe allow them the option of specifying the number of players in the command line.
-		//TODO: make an option for GUI instead.
 		//TODO: package it all up in a nice .jar file or something and all GUIs.
 		game = g;
 		preferences = fileManager;
@@ -30,7 +28,7 @@ public class GamePlayManager
 				playersString.append(playerID).append(" - ").append(player.getName()).append(", ").append(player.getInfo()).append("; ");
 				playerID++;
 			}
-			IOManager.output("\t" + playersString);
+			IOManager.output(playersString.toString());
 		}
 
 		// Play the game.
