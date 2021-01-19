@@ -20,7 +20,7 @@ public class GamePlayManager
 
 	public void start()
 	{
-		// Print game intro
+		//Print game intro
 		if (preferences.outputGameAndInfo)
 		{
 			IOManager.output("Game beginning: " + game.getNumPlayers() + "-player " + game.getName() + ".");
@@ -38,7 +38,7 @@ public class GamePlayManager
 		{
 			if (preferences.outputGameAndInfo)
 			{
-				IOManager.output("\n" + game.toString() + "\n");
+				IOManager.output(game.toString(), OutputType.GAMESTATE);
 			}
 
 			// Output engine recommendation
@@ -57,11 +57,12 @@ public class GamePlayManager
 			{
 				IOManager.output("Player " + game.getTurnPlayer() + " is thinking.");
 			}
-
+			long startTime = System.currentTimeMillis();
 			int nextMove = getMove(game.getTurnPlayer() - 1);
 			if (preferences.outputGameAndInfo && players.get(game.getTurnPlayer() - 1) instanceof SafeOptimalAI)
 			{
-				IOManager.output("Player " + game.getTurnPlayer() + " makes the move " + game.translateMoveIntToEnglish(nextMove) + ".");
+				IOManager.output("Player " + game.getTurnPlayer() + " makes the move " + game.translateMoveIntToEnglish(nextMove) +
+						" (" + (System.currentTimeMillis() - startTime) / 100 / 10.0 + "s)" + ".");
 			}
 			game.makeMove(nextMove);
 
@@ -82,27 +83,23 @@ public class GamePlayManager
 		// Print final game state, scores, and result.
 		if (preferences.outputGameAndInfo)
 		{
-			IOManager.output(game.toString());
+			IOManager.output(game.toString(), OutputType.GAMESTATE);
 			IOManager.output("\n\n");
 			int maxScorePlayerNumber = scores.indexOf(Collections.max(scores));
 			if (Collections.frequency(scores, Collections.max(scores)) > 1)
 			{
-				System.out.println("There's a tie!");
-				for (int i = 1; i <= scores.size(); i++)
-				{
-					System.out.println("Player " + i + " score: " + scores.get(i - 1));
-				}
+				IOManager.output("There's a tie!");
 			}
 			else
 			{
-				System.out.println("Player " + (maxScorePlayerNumber + 1) + " wins.");
+				IOManager.output("Player " + (maxScorePlayerNumber + 1) + " wins.");
 			}
 			StringBuilder scoresOutput = new StringBuilder();
 			for (int i = 0; i < scores.size(); i++)
 			{
 				scoresOutput.append("\tPlayer ").append(i + 1).append(" score: ").append(scores.get(i)).append("\n");
 			}
-			System.out.println(scoresOutput.toString());
+			IOManager.output(scoresOutput.toString());
 		}
 
 		if (preferences.outputGameAndInfo || preferences.outputMovestring)

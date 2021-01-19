@@ -1,10 +1,13 @@
+import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 public class IOManager
 {
     private static final Scanner keyboardInput = new Scanner(System.in);
-    private static IOMethod inputMethod = IOMethod.SYSTEM_IN;
-    private static IOMethod outputMethod = IOMethod.SYSTEM_OUT;
+    private static IOMethod inputMethod = IOMethod.SYSTEM;
+    private static IOMethod outputMethod = IOMethod.SYSTEM;
+    private static GUIManager guiManager;
 
     private static String getKeyboardInput()
     {
@@ -28,7 +31,7 @@ public class IOManager
 
     public static String getNextInput()
     {
-        if (inputMethod == IOMethod.SYSTEM_IN)
+        if (inputMethod == IOMethod.SYSTEM)
         {
             return getKeyboardInput();
         }
@@ -38,20 +41,37 @@ public class IOManager
         }
     }
 
-    public static void output(String outputString)
+    public static void output(String outputString, OutputType outputType)
     {
-        if (outputMethod == IOMethod.SYSTEM_OUT)
+        if (outputMethod == IOMethod.SYSTEM)
         {
             System.out.println(outputString);
         }
-        else
+        else if (outputMethod == IOMethod.GUI)
         {
-            throw new UnsupportedOperationException("not sysout output not implemented in IOManager class.");
+
+            SwingUtilities.invokeLater(() -> guiManager.display(outputString, outputType));
+
         }
+    }
+
+    public static void output(String outputString)
+    {
+        output(outputString, OutputType.MESSAGE);
+    }
+
+    public static void setGuiManager(GUIManager guiManager)
+    {
+        IOManager.guiManager = guiManager;
     }
 }
 
 enum IOMethod
 {
-    SYSTEM_IN, GUI, SYSTEM_OUT;
+    GUI, SYSTEM
+}
+
+enum OutputType
+{
+    MESSAGE, GAMESTATE, MOVE_OPTIONS
 }

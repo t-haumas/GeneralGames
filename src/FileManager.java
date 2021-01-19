@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.*;
-
+//TODO: delete tictactoe, make file names include number of players.
 public class FileManager
 {
     private final String configFilePath;

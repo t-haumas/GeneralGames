@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -101,11 +102,6 @@ public class Minimaxer
 				}
 			}
 
-			if (currentScore % 2 != 0 && certain)
-			{
-				System.err.println("oh no");
-			}
-
 			// Update extreme score
 			if (currentTurnPlayer == optimizingPlayer)
 			{
@@ -114,7 +110,6 @@ public class Minimaxer
 					extremeScore = currentScore;
 					extremeMove = move;
 				}
-//				alpha = Math.max(alpha, currentScore);
 			}
 			else
 			{
@@ -131,6 +126,103 @@ public class Minimaxer
 		}
 		return new MinimaxResult(extremeMove, extremeScore, certain);
 	}
+
+	/* AB pruning version: */
+//	public MinimaxResult minimaxDepthLimit(Game gamePlaying, int parentDepth, int alpha, int beta)
+//	{
+//
+//		//<editor-fold desc = "Setup">
+//		boolean certain = true;
+//		int myDepth = parentDepth + 1;
+//		if (myDepth > maxDiscoveredDepth)
+//		{
+//			maxDiscoveredDepth = myDepth;
+//		}
+//		int bestDiscoveredScoreForMaximizer = alpha;
+//		int bestDiscoveredScoreForMinimizer = beta;
+//
+//		int extremeMove = -1;
+//		int extremeScore;
+//		int currentScore;
+//		Game trialGame;
+//		int currentTurnPlayer = gamePlaying.getTurnPlayer();
+//		//</editor-fold>
+//
+//		if (currentTurnPlayer == optimizingPlayer)
+//			extremeScore = Integer.MIN_VALUE;
+//		else
+//			extremeScore = Integer.MAX_VALUE;
+//
+//		List<Integer> allMoveOptions = gamePlaying.getLegalMoves();
+//
+//		for (int move : allMoveOptions)
+//		{
+//			trialGame = gamePlaying.clone();
+//			trialGame.makeMove(move);
+//
+//			if (trialGame.isOver())
+//			{
+//				currentScore = trialGame.getScore(optimizingPlayer) - getMaxOpponentScore(trialGame);
+//			}
+//			else if (dataManager.knowMyOutcome(trialGame, optimizingPlayer))
+//			{
+//				GameInfo outcome = dataManager.getOutcome(trialGame);
+//				currentScore = outcome.getWinningPlayersScore();
+//			}
+//			else {
+//				if (myDepth >= depthLimit) {
+//					// This could be changed.
+//					currentScore = trialGame.getScore(optimizingPlayer) - getMaxOpponentScore(trialGame);
+//					certain = false;
+//				} else {
+//					MinimaxResult nextResult = minimaxDepthLimit(trialGame, myDepth, bestDiscoveredScoreForMaximizer, bestDiscoveredScoreForMinimizer);
+//					currentScore = nextResult.getScore();
+//					if (! nextResult.getCertainty())
+//					{
+//						certain = false;
+//					}
+//				}
+//			}
+//
+//			if (currentScore % 2 != 0 && certain)
+//			{
+//				System.err.println("oh no! The minimax has a problem.");
+//			}
+//
+//			// Update extreme score
+//			if (currentTurnPlayer == optimizingPlayer)
+//			{
+//				if (currentScore > extremeScore)
+//				{
+//					extremeScore = currentScore;
+//					extremeMove = move;
+//				}
+//				bestDiscoveredScoreForMaximizer = Math.max(bestDiscoveredScoreForMaximizer, currentScore);
+//				if (bestDiscoveredScoreForMinimizer <= bestDiscoveredScoreForMaximizer)
+//				{
+//					break;
+//				}
+//			}
+//			else
+//			{
+//				if (currentScore < extremeScore)
+//				{
+//					extremeScore = currentScore;
+//					extremeMove = move;
+//				}
+//				bestDiscoveredScoreForMinimizer = Math.max(bestDiscoveredScoreForMinimizer, currentScore);
+//				if (bestDiscoveredScoreForMinimizer <= bestDiscoveredScoreForMaximizer)
+//				{
+//					break;
+//				}
+//			}
+//		}
+//		if (certain && extremeScore > 0)
+//		{
+//			dataManager.saveDeterminedLine(gamePlaying.getMoveString(), optimizingPlayer, extremeScore);
+//		}
+//		return new MinimaxResult(extremeMove, extremeScore, certain);
+//	}
 
 
 	private int getMaxOpponentScore(Game game)

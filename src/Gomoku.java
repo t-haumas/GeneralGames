@@ -235,7 +235,7 @@ public class Gomoku extends Game
 	{
 		int y = move / boardLength;
 		int x = move % boardLength;
-		return x + "," + y;
+		return x + "-" + y;
 	}
 
 	@Override

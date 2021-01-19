@@ -15,7 +15,7 @@ public class GamePlayer
 //		String filepath = args[0];
 //		Game myGame = new Chopsticks(2, false);
 //		Game myGame = new Mancala(new int[]{4, 4, 0, 0, 6, 1, 3, 1, 2, 7, 7, 6, 6, 1}, 2);
-		Game myGame = new AvalancheMancala();
+		Game myGame = new Gomoku(5, 4);
 
 		GameManager gameManager = new GameManager(myGame);
 
@@ -39,7 +39,7 @@ public class GamePlayer
 
 
 //		gameManager.setPlayers("minimax, 12, minimax, 10");
-		gameManager.initialize();
+		gameManager.initialize(IOMethod.GUI);
 		gameManager.playGame();
 //		for (int depth1 = 1; depth1 <= 12; depth1++) {
 //			for (int depth2 = 1; depth2 <= 12; depth2++) {

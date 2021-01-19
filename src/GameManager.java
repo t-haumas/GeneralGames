@@ -4,10 +4,10 @@ public class GameManager
 {
     private Game game;
 
-    private FileManager fileManager;
-    private GameDataManager gameDataManager;
-    private GamePlayManager gamePlayManager;
-    private GUIManager guiManager;
+    private final FileManager fileManager;
+    private final GameDataManager gameDataManager;
+    private final GamePlayManager gamePlayManager;
+    private final GUIManager guiManager;
     private boolean initialized;
 
     public GameManager(Game game)
@@ -20,9 +20,15 @@ public class GameManager
         initialized = false;
     }
 
-    public void initialize()
+    public void initialize(IOMethod displayMethod)
     {
+//        IOManager.setInputMethod(displayMethod);
+        IOManager.setOutputMethod(displayMethod);
+        IOManager.setGuiManager(guiManager);
+
         long startTime = System.currentTimeMillis();
+        if (displayMethod == IOMethod.GUI)
+            guiManager.initialize();
         IOManager.output("Initializing...");
         fileManager.initialize();
         gamePlayManager.initialize();
@@ -53,21 +59,36 @@ public class GameManager
 
     public void setPlayers(String playersString)
     {
-        fileManager.setPlayers(playersString);
-        gamePlayManager.setPlayers(fileManager.getPlayers());
+        if (! initialized) {
+            JOptionPane.showMessageDialog(null,
+                    "You cannot set the players before the game manager has been initialized.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            fileManager.setPlayers(playersString);
+            gamePlayManager.setPlayers(fileManager.getPlayers());
+        }
     }
 
     public void restartGame()
     {
-        game.restart();
-        gameDataManager.resetNumDiscovered();
+        if (! initialized)
+        {
+            JOptionPane.showMessageDialog(null,
+                    "You cannot restart the game before the game manager has been initialized.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            game.restart();
+            gameDataManager.resetNumDiscovered();
+        }
     }
 
-    public void printShortLines(String beginning, int maxLength)
+    public void outputShortLines(String beginning, int maxLength)
     {
         for (String s : gameDataManager.getLinesList(beginning, maxLength))
         {
-            System.out.println(s);
+            IOManager.output(s);
         }
     }
 }
