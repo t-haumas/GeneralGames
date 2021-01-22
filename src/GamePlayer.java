@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class GamePlayer
 { //TODO: make chess and maybe checkers.
 	//TODO: make an engine that shows all available lines and their ratings.
@@ -13,9 +15,10 @@ public class GamePlayer
 //		String filepath = args[0];
 //		Game myGame = new Chopsticks(2, false);
 //		Game myGame = new Mancala(new int[]{4, 4, 0, 0, 6, 1, 3, 1, 2, 7, 7, 6, 6, 1}, 2);
-		Game myGame = new Gomoku(7, 6);
+		Game myGame = new AvalancheMancala();
 
 		GameManager gameManager = new GameManager(myGame);
+//		expand(myGame);
 
 		//gameManager.initialize();
 //		gameManager.playGame();
@@ -59,5 +62,21 @@ public class GamePlayer
 
 //			}
 //		}
+	}
+
+	public static void expand(Game game)
+	{
+		for (int move : game.getLegalMoves())
+		{
+			Game newGame = game.clone();
+			newGame.makeMove(move);
+			if (newGame.isOver() && newGame.getScore(1) > 40)
+				System.out.println(newGame.getMoveString() + "  " + newGame.getScore(1));
+			else
+			{
+				if (newGame.getTurnPlayer() == 1)
+					expand(newGame);
+			}
+		}
 	}
 }

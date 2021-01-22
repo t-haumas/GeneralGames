@@ -22,8 +22,8 @@ public class GUIManager {
         mainDisplayCreated = false;
         backgroundColor = UIManager.getColor("Panel.background");
         initialized = false;
-    }
-
+    }//TODO: Make frame have the name of the game.
+//TODO: make panes stop wrapping lines.
     public void initialize() {
         createMainDisplay();
         setUpMessages();
@@ -37,6 +37,7 @@ public class GUIManager {
         constraints.ipady = 10;
         mainPanel.add(gameState, constraints);
 
+        constraints.weightx = 2;
         constraints.gridx = 1;
         mainPanel.add(messages, constraints);
 

@@ -6,21 +6,47 @@ public class AvalancheMancala extends Game
     // Don't use this if not using 14 spaces.
     private static final int[] blank14 = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+    private final boolean customSpaces;
+    public static int[] originalSpaces;
     private int[] spaces;
     private final int TOTAL_NUM_SPACES = 14;
     private final int INITIAL_DENSITY = 4;
 
     public AvalancheMancala()
     {
+        customSpaces = false;
         if (! (TOTAL_NUM_SPACES % 2 == 0))
             throw new RuntimeException("Mancala game cannot have odd number of spaces.");
 
         createNewGame();
+
+        for (int i = 0; i < TOTAL_NUM_SPACES; i++)
+        {
+            spaces[i] = INITIAL_DENSITY;
+        }
+        spaces[TOTAL_NUM_SPACES - 1] = 0;
+        spaces[TOTAL_NUM_SPACES / 2 - 1] = 0;
+
     }
 
-    public AvalancheMancala(int turnPlayer, int[] spaces, StringBuilder moveStringBuilder)
+    public AvalancheMancala(int[] spaces)
+    {
+        customSpaces = true;
+        originalSpaces = new int[spaces.length];
+        System.arraycopy(spaces, 0, originalSpaces, 0, spaces.length);
+
+        if (! (TOTAL_NUM_SPACES % 2 == 0) || TOTAL_NUM_SPACES != spaces.length)
+            throw new RuntimeException("Avalanche mancala game has invalid number of spaces.");
+
+        createNewGame();
+
+        System.arraycopy(spaces, 0, this.spaces, 0, spaces.length);
+    }
+
+    public AvalancheMancala(int turnPlayer, int[] spaces, boolean customSpaces, StringBuilder moveStringBuilder)
     {
         super(moveStringBuilder);
+        this.customSpaces = customSpaces;
         this.turnPlayer = turnPlayer;
         this.spaces = new int[TOTAL_NUM_SPACES];
         System.arraycopy(spaces, 0, this.spaces, 0, spaces.length);
@@ -29,20 +55,25 @@ public class AvalancheMancala extends Game
     @Override
     public String getName()
     {
-        return "Avalanche-mode Mancala";
+        if (! customSpaces) {
+            return "Avalanche-mode Mancala";
+        }
+        else {
+            StringBuilder output = new StringBuilder("Avalanche-mode Mancala custom spaces  ");
+            for (int space : originalSpaces)
+            {
+                output.append(space).append(" ");
+            }
+            output.delete(output.length() - 1, output.length());
+            return output.toString();
+        }
     }
 
     @Override
     protected void createNewGame()
     {
-        turnPlayer = 1;
         spaces = new int[TOTAL_NUM_SPACES];
-        for (int i = 0; i < TOTAL_NUM_SPACES; i++)
-        {
-            spaces[i] = INITIAL_DENSITY;
-        }
-        spaces[TOTAL_NUM_SPACES - 1] = 0;
-        spaces[TOTAL_NUM_SPACES / 2 - 1] = 0;
+        turnPlayer = 1;
     }
 
     @Override
@@ -163,7 +194,7 @@ public class AvalancheMancala extends Game
     @Override
     public Game clone()
     {
-        return new AvalancheMancala(turnPlayer, spaces, moveStringBuilder);
+        return new AvalancheMancala(turnPlayer, spaces, customSpaces, moveStringBuilder);
     }
 
     @Override

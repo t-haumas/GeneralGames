@@ -1,4 +1,5 @@
 import javax.sound.sampled.*;
+import javax.swing.*;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -123,6 +124,11 @@ public class Thaumas {
 //            fadingArray[fadingArray.length - 11 + i] *= (10 - i) / 10.0;
 //        }
         return fadingArray;
+    }
+
+    public static void showErrorWindow(String errorMessage)
+    {
+        JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private static final class StdAudio

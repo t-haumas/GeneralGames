@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/* If something is trying to make -1 as a move, it means they have no move options (check isOver method)*/
 public class Minimaxer
 {
 	private int optimizingPlayer;
@@ -99,6 +100,8 @@ public class Minimaxer
 					{
 						certain = false;
 					}
+					if (myDepth == 1 && currentScore == Integer.MIN_VALUE)
+						System.out.println("Wow");
 				}
 			}
 
@@ -124,6 +127,8 @@ public class Minimaxer
 		{
 			dataManager.saveDeterminedLine(gamePlaying.getMoveString(), optimizingPlayer, extremeScore);
 		}
+		if (extremeScore == Integer.MIN_VALUE)
+			System.out.println("Wow");
 		return new MinimaxResult(extremeMove, extremeScore, certain);
 	}
 

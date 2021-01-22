@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +13,12 @@ public class Chopsticks extends Game
      */
     private int[] playerHands;
     private boolean yesOverflow;
-    private int numDead;
     private int gameLength;
     private final int numPlayers;
+    private ArrayList<Integer> deadPeople;
 
     //TODO: add optional resurrecting?!
+    //TODO: make perpet stop the game wehre everyone has a bad score.
 
     public Chopsticks(int numberOfPlayers, boolean handsOverflow)
     {
@@ -33,11 +36,11 @@ public class Chopsticks extends Game
             playerHands[i] = 1;
         }
         turnPlayer = 1;
-        numDead = 0;
+        deadPeople = new ArrayList<>();
         gameLength = 0;
     }
 
-    private Chopsticks(int numberOfPlayers, boolean handsOverflow, int[] handValues, int turnPlayer, int numDead, int gameLength, StringBuilder moveStringBuilder)
+    private Chopsticks(int numberOfPlayers, boolean handsOverflow, int[] handValues, int turnPlayer, int gameLength, ArrayList<Integer> deadPeople, StringBuilder moveStringBuilder)
     {
         super(moveStringBuilder);
         numPlayers = numberOfPlayers;
@@ -45,8 +48,8 @@ public class Chopsticks extends Game
         if (numPlayers * 2 >= 0) System.arraycopy(handValues, 0, playerHands, 0, numPlayers * 2);
         yesOverflow = handsOverflow;
         this.turnPlayer = turnPlayer;
-        this.numDead = numDead;
         this.gameLength = gameLength;
+        this.deadPeople = new ArrayList<>(deadPeople);
     }
 
     @Override
@@ -127,7 +130,7 @@ public class Chopsticks extends Game
     {
         if (! isLegal(move))
         {
-            System.err.println("In chopsticks: illegal move.");
+            Thaumas.showErrorWindow("In chopsticks: illegal move.");
             return false;
         }
         int fromPosition = (turnPlayer - 1) * 2 + (((move / 8) % 2 == 0) ? 0 : 1);
@@ -150,10 +153,14 @@ public class Chopsticks extends Game
         // Check to see if someone just died.
         if (playerHands[move / 16 * 2] == 0 && playerHands[move / 16 * 2 + 1] == 0)
         {
-            numDead++;
+            deadPeople.add(move / 16 + 1);
         }
 
         turnPlayer = getNextPlayer();
+        while (deadPeople.contains(turnPlayer))
+        {
+            turnPlayer = getNextPlayer();
+        }
         gameLength++;
         return true;
     }
@@ -163,8 +170,13 @@ public class Chopsticks extends Game
     {
         if (isOver())
         {
-            return playerHands[(player - 1) * 2] + playerHands[(player - 1) * 2 + 1] > 0 ? 1000 : gameLength;
-            //return playerHands[(player - 1) * 2] + playerHands[(player - 1) * 2 + 1];
+            // Try to elongate game length:
+            //return playerHands[(player - 1) * 2] + playerHands[(player - 1) * 2 + 1] > 0 ? 1000 : gameLength;
+            return playerHands[(player - 1) * 2] + playerHands[(player - 1) * 2 + 1];
+        }
+        else if (deadPeople.contains(player))
+        {
+            return -1;
         }
         else
             return 0;
@@ -173,7 +185,7 @@ public class Chopsticks extends Game
     @Override
     public boolean isOver()
     {
-        return numDead == numPlayers - 1;
+        return deadPeople.size() == numPlayers - 1;
     }
 
     @Override
@@ -184,7 +196,7 @@ public class Chopsticks extends Game
     @Override
     public Game clone()
     {
-        return new Chopsticks(numPlayers, yesOverflow, playerHands, turnPlayer, numDead, gameLength, moveStringBuilder);
+        return new Chopsticks(numPlayers, yesOverflow, playerHands, turnPlayer, gameLength, deadPeople, moveStringBuilder);
     }
 
     @Override
