@@ -6,6 +6,10 @@ public class Mancala extends Game
     private static final int[] blank14 = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private static final int TOTAL_BOARD_SPACES = 14;
     private static final int INITIAL_SPACE_DENSITY = 4;
+
+    private static int[] originalSpaces;
+
+    private final boolean custom;
     private int[] spaces;
 
     /**
@@ -14,7 +18,31 @@ public class Mancala extends Game
      */
     public Mancala()
     {
+        if (! (TOTAL_BOARD_SPACES % 2 == 0))
+            throw new RuntimeException("Mancala game must have even number of spaces.");
+
         createNewGame();
+        for (int i = 0; i < spaces.length; i++)
+        {
+            if(! isScoreSpace(i))
+            {
+                spaces[i] = INITIAL_SPACE_DENSITY;
+            }
+        }
+        custom = false;
+    }
+
+    public Mancala(int[] spaces)
+    {
+        createNewGame();
+        System.arraycopy(spaces, 0, this.spaces, 0, spaces.length);
+        originalSpaces = new int[TOTAL_BOARD_SPACES];
+
+        if (! (TOTAL_BOARD_SPACES % 2 == 0) || TOTAL_BOARD_SPACES != spaces.length)
+            throw new RuntimeException("Avalanche mancala game has invalid number of spaces.");
+
+        custom = true;
+        System.arraycopy(spaces, 0, originalSpaces, 0, spaces.length);
     }
 
     @Override
@@ -23,13 +51,6 @@ public class Mancala extends Game
         turnPlayer = 1;
 
         spaces = new int[TOTAL_BOARD_SPACES];
-        for (int i = 0; i < spaces.length; i++)
-        {
-            if(! isScoreSpace(i))
-            {
-                spaces[i] = INITIAL_SPACE_DENSITY;
-            }
-        }
     }
 
     /**
@@ -38,9 +59,10 @@ public class Mancala extends Game
      * @param spaceValues The board[] representing the mancala board
      * @param turnPlayer The player who will move now.
      */
-    private Mancala(int[] spaceValues, int turnPlayer, StringBuilder moveStringBuilder)
+    private Mancala(int[] spaceValues, int turnPlayer, boolean spacesAreCustom, StringBuilder moveStringBuilder)
     {
         super(moveStringBuilder);
+        custom = spacesAreCustom;
         this.turnPlayer = turnPlayer;
         spaces = new int[TOTAL_BOARD_SPACES];
         System.arraycopy(spaceValues, 0, spaces, 0, spaceValues.length);
@@ -195,7 +217,18 @@ public class Mancala extends Game
     @Override
     public String getName()
     {
-        return "capture-mode Mancala";
+        if (! custom) {
+            return "capture-mode Mancala";
+        }
+        else {
+            StringBuilder output = new StringBuilder("capture-mode Mancala custom spaces  ");
+            for (int space : originalSpaces)
+            {
+                output.append(space).append(" ");
+            }
+            output.delete(output.length() - 1, output.length());
+            return output.toString();
+        }
     }
 
     @Override
@@ -281,7 +314,7 @@ public class Mancala extends Game
     @Override
     public Game clone()
     {
-        return new Mancala(spaces, turnPlayer, moveStringBuilder);
+        return new Mancala(spaces, turnPlayer, custom, moveStringBuilder);
     }
 
     @Override

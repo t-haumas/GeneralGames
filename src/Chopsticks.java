@@ -1,7 +1,4 @@
-import javax.swing.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Chopsticks extends Game
@@ -12,7 +9,7 @@ public class Chopsticks extends Game
      * So, playerNumber * 2 = Left, and playerNumber * 2 + 1 = Right.
      */
     private int[] playerHands;
-    private boolean yesOverflow;
+    private final boolean yesOverflow;
     private int gameLength;
     private final int numPlayers;
     private ArrayList<Integer> deadPeople;

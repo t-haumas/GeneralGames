@@ -33,10 +33,11 @@ public class AvalancheMancala extends Game
     {
         customSpaces = true;
         originalSpaces = new int[spaces.length];
-        System.arraycopy(spaces, 0, originalSpaces, 0, spaces.length);
 
         if (! (TOTAL_NUM_SPACES % 2 == 0) || TOTAL_NUM_SPACES != spaces.length)
             throw new RuntimeException("Avalanche mancala game has invalid number of spaces.");
+
+        System.arraycopy(spaces, 0, originalSpaces, 0, spaces.length);
 
         createNewGame();
 

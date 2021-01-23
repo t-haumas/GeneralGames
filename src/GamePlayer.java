@@ -15,7 +15,7 @@ public class GamePlayer
 //		String filepath = args[0];
 //		Game myGame = new Chopsticks(2, false);
 //		Game myGame = new Mancala(new int[]{4, 4, 0, 0, 6, 1, 3, 1, 2, 7, 7, 6, 6, 1}, 2);
-		Game myGame = new AvalancheMancala();
+		Game myGame = new Mancala();
 
 		GameManager gameManager = new GameManager(myGame);
 //		expand(myGame);

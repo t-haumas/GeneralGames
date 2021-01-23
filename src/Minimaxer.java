@@ -232,21 +232,22 @@ public class Minimaxer
 
 	private int getMaxOpponentScore(Game game)
 	{
-		ArrayList<Integer> otherScores = new ArrayList<>();
-		int currentPlayer = 1;
-		if (currentPlayer != optimizingPlayer)
-		{
-			otherScores.add(game.getScore(currentPlayer));
-		}
-		currentPlayer = game.getNextPlayer(currentPlayer);
-		while (currentPlayer != 1)
-		{
-			if (currentPlayer != optimizingPlayer)
-			{
+		if (game.getNumPlayers() > 1) {
+			ArrayList<Integer> otherScores = new ArrayList<>();
+			int currentPlayer = 1;
+			if (currentPlayer != optimizingPlayer) {
 				otherScores.add(game.getScore(currentPlayer));
 			}
 			currentPlayer = game.getNextPlayer(currentPlayer);
+			while (currentPlayer != 1) {
+				if (currentPlayer != optimizingPlayer) {
+					otherScores.add(game.getScore(currentPlayer));
+				}
+				currentPlayer = game.getNextPlayer(currentPlayer);
+			}
+			return Collections.max(otherScores);
 		}
-		return Collections.max(otherScores);
+		else
+			return 0;
 	}
 }

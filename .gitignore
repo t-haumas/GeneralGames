@@ -3,3 +3,7 @@
 *.class
 .idea
 Forceable-Wins*.txt
+.DS_Store
+Determined-Lines*.txt
+Game Files
+*.iml
