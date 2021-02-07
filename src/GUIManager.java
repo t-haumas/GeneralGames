@@ -2,18 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GUIManager {
-    private Game game;
+    private final Game game;
     private final GameManager gameManager;
     private JFrame mainFrame;
     private JPanel mainPanel;
+    private JPanel moveOptionsPanel;
     private JScrollPane messages;
     private JEditorPane messagesTextPane;
 
-    private JScrollPane gameState;
-    private JEditorPane gameStatePane;
+    private JScrollPane gameStateScrollPane;
 
     private boolean mainDisplayCreated;
-    private Color backgroundColor;
+    private final Color backgroundColor;
     private boolean initialized;
 
     public GUIManager(Game game, GameManager gameManager) {
@@ -22,12 +22,21 @@ public class GUIManager {
         mainDisplayCreated = false;
         backgroundColor = UIManager.getColor("Panel.background");
         initialized = false;
-    }//TODO: Make frame have the name of the game.
+    }
 //TODO: make panes stop wrapping lines.
     public void initialize() {
         createMainDisplay();
         setUpMessages();
-        setUpGameStatePane();
+        updateGameStateScrollPane();
+
+        moveOptionsPanel = new JPanel();
+
+        double widthToHeightRatio = 1.4;
+        int numVerticalButtons = (int) Math.ceil(Math.sqrt(1 / widthToHeightRatio * game.getMaxNumMovesForOnePlayer()));
+        int numHorizontalButtons = (int) Math.ceil(widthToHeightRatio * game.getMaxNumMovesForOnePlayer());
+        moveOptionsPanel.setLayout(new GridLayout(numHorizontalButtons, numVerticalButtons, 3, 3));
+
+
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
         constraints.weighty = 1;
@@ -35,7 +44,7 @@ public class GUIManager {
 
         constraints.ipadx = 10;
         constraints.ipady = 10;
-        mainPanel.add(gameState, constraints);
+        mainPanel.add(gameStateScrollPane, constraints);
 
         constraints.weightx = 2;
         constraints.gridx = 1;
@@ -44,23 +53,25 @@ public class GUIManager {
         initialized = true;
     }
 
-    private void setUpGameStatePane()
-    {
-        gameStatePane = new JEditorPane();
-        gameStatePane.setEditable(false);
-        gameStatePane.setBackground(backgroundColor);
-        gameStatePane.setContentType("text/html");
+    private void updateGameStateScrollPane() {
+        gameStateScrollPane = new JScrollPane(game.getPanelRepresentingThisGame());
+        gameStateScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        gameStateScrollPane.getVerticalScrollBar().setUnitIncrement(10);
+        gameStateScrollPane.getHorizontalScrollBar().setUnitIncrement(10);
+        gameStateScrollPane.setBackground(backgroundColor);
+        mainPanel.removeAll();
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+        constraints.fill = GridBagConstraints.BOTH;
 
-        JPanel gameStatePanel = new JPanel();
-        gameStatePanel.setLayout(new BorderLayout());
-        gameStatePanel.add(gameStatePane, BorderLayout.CENTER);
-        gameStatePanel.setBackground(backgroundColor);
+        constraints.ipadx = 10;
+        constraints.ipady = 10;
+        mainPanel.add(gameStateScrollPane, constraints);
 
-        gameState = new JScrollPane(gameStatePanel);
-        gameState.setBorder(BorderFactory.createEmptyBorder());
-        gameState.getVerticalScrollBar().setUnitIncrement(10);
-        gameState.getHorizontalScrollBar().setUnitIncrement(10);
-        gameState.setBackground(backgroundColor);
+        constraints.weightx = 2;
+        constraints.gridx = 1;
+        mainPanel.add(messages, constraints);
     }
 
     private void setUpMessages() {
@@ -84,7 +95,7 @@ public class GUIManager {
 
     private void createMainDisplay() {
         if (!mainDisplayCreated) {
-            mainFrame = new JFrame("Hi");
+            mainFrame = new JFrame(game.getName());
             Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
             mainFrame.setPreferredSize(new Dimension(screenDimension.width / 2, screenDimension.height / 2));
 
@@ -113,9 +124,7 @@ public class GUIManager {
             }
             else if (outputType == OutputType.GAMESTATE)
             {
-                String gameStateString = "<html><head><style>.gamestate{font-family: \"courier\"; font-size: 25 px; text-align: center; margin: auto; width: 50%; padding: 20px}</style></head><body><div class=\"gamestate\">";
-                gameStateString += outputString.replace("\n", "<br>").replace(" ", "&nbsp;") + "</div></body></html>";
-                gameStatePane.setText(gameStateString);
+                updateGameStateScrollPane();
             }
             else
             {

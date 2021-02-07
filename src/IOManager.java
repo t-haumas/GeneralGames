@@ -49,9 +49,7 @@ public class IOManager
         }
         else if (outputMethod == IOMethod.GUI)
         {
-
             SwingUtilities.invokeLater(() -> guiManager.display(outputString, outputType));
-
         }
     }
 

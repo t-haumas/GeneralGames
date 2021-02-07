@@ -227,6 +227,12 @@ public class TicTacToe extends Game
 	}
 
 	@Override
+	public int getMaxNumMovesForOnePlayer()
+	{
+		return 9;
+	}
+
+	@Override
 	public int getMaxMove()
 	{
 		return 8;

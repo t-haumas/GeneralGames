@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -242,6 +243,17 @@ public class Gomoku extends Game
 	public String getName()
 	{
 		return boardLength + "x" + boardLength + " " + winLength + "-in-a-row" + " Gomoku";
+	}
+
+	@Override
+	public int getMaxNumMovesForOnePlayer()
+	{
+		return boardLength * boardLength;
+	}
+
+	@Override
+	public JPanel getPanelRepresentingThisGame() {
+		return null;
 	}
 
 	@Override

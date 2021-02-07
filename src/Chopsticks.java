@@ -55,9 +55,14 @@ public class Chopsticks extends Game
         return yesOverflow ? "O" : "No-o" + "verflow Chopsticks";
     }
 
+    @Override
+    public int getMaxNumMovesForOnePlayer() {
+        return 16 * (numPlayers - 1);
+    }
+
     public int getMaxMove()
     {
-        return numPlayers * 16 - 1;
+        return numPlayers * 16 * (numPlayers - 1) - 1;
     }
 
     @Override

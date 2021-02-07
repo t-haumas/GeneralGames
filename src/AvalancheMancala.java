@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +69,12 @@ public class AvalancheMancala extends Game
             output.delete(output.length() - 1, output.length());
             return output.toString();
         }
+    }
+
+    @Override
+    public int getMaxNumMovesForOnePlayer()
+    {
+        return (TOTAL_NUM_SPACES - 2) / 2;
     }
 
     @Override

@@ -232,6 +232,12 @@ public class Mancala extends Game
     }
 
     @Override
+    public int getMaxNumMovesForOnePlayer()
+    {
+        return (TOTAL_BOARD_SPACES - 2) / 2;
+    }
+
+    @Override
     public int getMaxMove() {
         return TOTAL_BOARD_SPACES - 2;
     }

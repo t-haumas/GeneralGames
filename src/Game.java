@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -31,6 +33,26 @@ public abstract class Game implements Cloneable
 	 * @return The name of the game as a string.
 	 */
 	public abstract String getName();
+
+	public abstract int getMaxNumMovesForOnePlayer();
+
+	public JPanel getPanelRepresentingThisGame()
+	{
+		JEditorPane gameStatePane = new JEditorPane();
+		gameStatePane.setEditable(false);
+		gameStatePane.setBackground(UIManager.getColor("Panel.background"));
+		gameStatePane.setContentType("text/html");
+
+		String gameStateString = "<html><head><style>.gamestate{font-family: \"courier\"; font-size: 25 px; text-align: center; margin: auto; width: 50%; padding: 20px}</style></head><body><div class=\"gamestate\">";
+		gameStateString += toString().replace("\n", "<br>").replace(" ", "&nbsp;") + "</div></body></html>";
+		gameStatePane.setText(gameStateString);
+
+		JPanel gameStatePanel = new JPanel();
+		gameStatePanel.setLayout(new BorderLayout());
+		gameStatePanel.add(gameStatePane, BorderLayout.CENTER);
+//		gameStatePanel.setBackground(backgroundColor);
+		return gameStatePanel;
+	}
 
 	public void restart()
 	{
