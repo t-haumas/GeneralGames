@@ -1,10 +1,7 @@
 import java.util.Scanner;
 
 public class GamePlayer
-{ //TODO: make chess and maybe checkers.
-	//TODO: make an engine that shows all available lines and their ratings.
-	//TODO: create a trainer?
-	//TODO: create an analysis engine?
+{
 	public static void main(String[] args)
 	{
 

@@ -50,8 +50,6 @@ public class Minimaxer
 
 	public MinimaxResult minimaxDepthLimit(Game gamePlaying, int parentDepth)
 	{
-		//TODO: add options for moves, rather than just one. >= in the game over block.
-
 		//<editor-fold desc = "Setup">
 		boolean certain = true;
 		int myDepth = parentDepth + 1;

@@ -14,9 +14,6 @@ public class Chopsticks extends Game
     private final int numPlayers;
     private ArrayList<Integer> deadPeople;
 
-    //TODO: add optional resurrecting?!
-    //TODO: make perpet stop the game wehre everyone has a bad score.
-
     public Chopsticks(int numberOfPlayers, boolean handsOverflow)
     {
         numPlayers = numberOfPlayers;

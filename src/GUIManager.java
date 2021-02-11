@@ -23,7 +23,7 @@ public class GUIManager {
         backgroundColor = UIManager.getColor("Panel.background");
         initialized = false;
     }
-//TODO: make panes stop wrapping lines.
+
     public void initialize() {
         createMainDisplay();
         setUpMessages();

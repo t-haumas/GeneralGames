@@ -16,7 +16,6 @@ public class Gomoku extends Game
 	private final int winLength;
 	private ArrayList<Integer> legalMoves;
 
-	//TODO: add checking that winLength <= length.
 	public Gomoku(int length, int winLength)
 	{
 		this.winLength = winLength;

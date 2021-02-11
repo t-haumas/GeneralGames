@@ -197,7 +197,6 @@ public class FileManager
     private void readAndApplyConfig()
     {
         File configFile = new File(configFilePath);
-        //TODO: make option to print confidence. "think" vs "know" Px will lose/win.
 
         try {
             //	Set up scanners.
