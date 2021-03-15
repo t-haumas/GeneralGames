@@ -22,7 +22,7 @@ public class GameManager
 
     public void initialize(IOMethod displayMethod)
     {
-//        IOManager.setInputMethod(displayMethod);
+        IOManager.setInputMethod(displayMethod);
         IOManager.setOutputMethod(displayMethod);
         IOManager.setGuiManager(guiManager);
 

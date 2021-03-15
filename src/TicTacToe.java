@@ -204,7 +204,7 @@ public class TicTacToe extends Game
 	{
 		int y = move / 3;
 		int x = move % 3;
-		return Integer.toString(x) + "," + Integer.toString(y);
+		return Integer.toString(x) + "-" + Integer.toString(y);
 	}
 
 	public String toString()

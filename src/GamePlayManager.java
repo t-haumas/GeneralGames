@@ -120,7 +120,7 @@ public class GamePlayManager
 		}
 		else
 		{
-			output += "tied with the opponent(s)";
+			output += "at least tied with the opponent(s)";
 		}
 		return output;
 	}

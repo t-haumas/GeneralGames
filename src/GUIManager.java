@@ -1,14 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Scanner;
 
 public class GUIManager {
     private final Game game;
     private final GameManager gameManager;
+    public boolean waitingForMoveSubmission;
     private JFrame mainFrame;
     private JPanel mainPanel;
     private JPanel moveOptionsPanel;
     private JScrollPane messages;
     private JEditorPane messagesTextPane;
+    private JComboBox<String> moveOptions;
+    private JLabel statusLabel;
+    private JButton moveButton;
 
     private JScrollPane gameStateScrollPane;
 
@@ -22,47 +29,21 @@ public class GUIManager {
         mainDisplayCreated = false;
         backgroundColor = UIManager.getColor("Panel.background");
         initialized = false;
+        waitingForMoveSubmission = true;
     }
 
     public void initialize() {
         createMainDisplay();
         setUpMessages();
-        updateGameStateScrollPane();
 
-        moveOptionsPanel = new JPanel();
-
-        double widthToHeightRatio = 1.4;
-        int numVerticalButtons = (int) Math.ceil(Math.sqrt(1 / widthToHeightRatio * game.getMaxNumMovesForOnePlayer()));
-        int numHorizontalButtons = (int) Math.ceil(widthToHeightRatio * game.getMaxNumMovesForOnePlayer());
-        moveOptionsPanel.setLayout(new GridLayout(numHorizontalButtons, numVerticalButtons, 3, 3));
-
-
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.weightx = 1;
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-
-        constraints.ipadx = 10;
-        constraints.ipady = 10;
-        mainPanel.add(gameStateScrollPane, constraints);
-
-        constraints.weightx = 2;
-        constraints.gridx = 1;
-        mainPanel.add(messages, constraints);
-
-        initialized = true;
-    }
-
-    private void updateGameStateScrollPane() {
         gameStateScrollPane = new JScrollPane(game.getPanelRepresentingThisGame());
         gameStateScrollPane.setBorder(BorderFactory.createEmptyBorder());
         gameStateScrollPane.getVerticalScrollBar().setUnitIncrement(10);
         gameStateScrollPane.getHorizontalScrollBar().setUnitIncrement(10);
         gameStateScrollPane.setBackground(backgroundColor);
-        mainPanel.removeAll();
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.weightx = 1;
-        constraints.weighty = 1;
+        constraints.weighty = 0.1;
         constraints.fill = GridBagConstraints.BOTH;
 
         constraints.ipadx = 10;
@@ -72,6 +53,84 @@ public class GUIManager {
         constraints.weightx = 2;
         constraints.gridx = 1;
         mainPanel.add(messages, constraints);
+
+        updateGameStateScrollPane();
+
+        moveOptionsPanel = new JPanel();
+        moveOptionsPanel.setLayout(new BoxLayout(moveOptionsPanel, BoxLayout.X_AXIS));
+        moveOptionsPanel.setBackground(new Color(200, 220, 250));
+        moveOptions = new JComboBox<>();
+        moveOptions.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyChar() == '\n') {
+                    makeMove();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+        moveOptionsPanel.add(moveOptions);
+        moveButton = new JButton("Make move");
+        moveButton.addActionListener(e -> makeMove());
+        moveOptionsPanel.add(moveButton);
+
+        statusLabel = new JLabel();
+        statusLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+        statusLabel.setText("I'm supposed to say whose turn it is!");
+        statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        constraints = new GridBagConstraints();
+        constraints.weightx = 1;
+        constraints.weighty = 0.1;
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridheight = 2;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.ipadx = 10;
+        constraints.ipady = 10;
+        mainPanel.add(gameStateScrollPane, constraints);
+
+        constraints.weightx = 0.3;
+        constraints.gridx = 1;
+        constraints.gridheight = 1;
+        mainPanel.add(statusLabel, constraints);
+
+        constraints.gridy = 1;
+        mainPanel.add(moveOptionsPanel, constraints);
+
+        constraints.gridx = 2;
+        constraints.weightx = 0.00001;
+        constraints.weighty = 0.1;
+        mainPanel.add(Box.createVerticalStrut((int) (game.getPanelRepresentingThisGame().getPreferredSize().getHeight() * 1.25)), constraints);
+
+        constraints.weighty = 3;
+        constraints.weightx = 1;
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 4;
+        constraints.gridheight = 1;
+        mainPanel.add(messages, constraints);
+
+
+        initialized = true;
+    }
+
+    private void makeMove() {
+        waitingForMoveSubmission = false;
+    }
+
+    private void updateGameStateScrollPane() {
+        gameStateScrollPane.setViewportView(game.getPanelRepresentingThisGame());
     }
 
     private void setUpMessages() {
@@ -126,11 +185,13 @@ public class GUIManager {
             {
                 updateGameStateScrollPane();
             }
-            else
-            {
+            else if (outputType == OutputType.MOVE_OPTIONS) {
+                updateMoveOptions(outputString);
+            } else if (outputType == OutputType.WHOSE_TURN){
+                statusLabel.setText(outputString + "'s turn");
+            } else {
                 throw new UnsupportedOperationException("output type " + outputType + " not supported yet.");
             }
-
             mainPanel.revalidate();
             mainFrame.revalidate();
             mainPanel.repaint();
@@ -140,6 +201,24 @@ public class GUIManager {
         {
             throw new IllegalStateException("GUI has not been initialized yet!");
         }
+    }
+
+    private void updateMoveOptions(String optionsString) {
+        moveOptions.removeAllItems();
+        Scanner optionsScanner = new Scanner(optionsString);
+        optionsScanner.useDelimiter(", ");
+        while (optionsScanner.hasNext()) {
+            moveOptions.addItem(optionsScanner.next());
+        }
+    }
+
+    public String getMove() {
+        return (String)moveOptions.getSelectedItem();
+    }
+
+    public void waitForMove() {
+        waitingForMoveSubmission = true;
+        moveOptions.requestFocusInWindow();
     }
 }
 

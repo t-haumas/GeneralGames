@@ -251,11 +251,6 @@ public class Gomoku extends Game
 	}
 
 	@Override
-	public JPanel getPanelRepresentingThisGame() {
-		return null;
-	}
-
-	@Override
 	public int getMaxMove()
 	{
 		return boardLength * boardLength;

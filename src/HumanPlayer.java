@@ -13,16 +13,15 @@ public class HumanPlayer extends Player
 	@Override
 	public int getMove(Game playingGame)
 	{
-		StringBuilder output = new StringBuilder(myName + ", make a move.\n");
-		output.append("Valid moves include: ");
+		IOManager.output(myName, OutputType.WHOSE_TURN);
+		StringBuilder output = new StringBuilder();
 		for (int move : playingGame.getLegalMoves())
 		{
 			output.append(playingGame.translateMoveIntToEnglish(move)).append(", ");
 		}
-		output = new StringBuilder(output.substring(0, output.length() - 2) + ".");
-		System.out.println(output);
+		output = new StringBuilder(output.substring(0, output.length() - 2));
+		IOManager.output(output.toString(), OutputType.MOVE_OPTIONS);
 
-		System.out.print("What move would you like to make? ");
 		String moveString;
 
 		moveString = IOManager.getNextInput();

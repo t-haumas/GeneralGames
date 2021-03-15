@@ -5,7 +5,7 @@ public class GamePlayer
 	public static void main(String[] args)
 	{
 
-		Game myGame = new Mancala();
+		Game myGame = new Chess();
 
 		GameManager gameManager = new GameManager(myGame);
 		gameManager.initialize(IOMethod.GUI);

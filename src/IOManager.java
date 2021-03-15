@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 public class IOManager
@@ -14,9 +13,11 @@ public class IOManager
         return keyboardInput.nextLine();
     }
 
-    private static String getGUITextInput()
+    private static String getGUIMoveInput()
     {
-        throw new UnsupportedOperationException("getGUITextInput not implemented in IOManager class.");
+        guiManager.waitForMove();
+        while (guiManager.waitingForMoveSubmission) {try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}}
+        return guiManager.getMove();
     }
 
     public static void setInputMethod(IOMethod method)
@@ -37,7 +38,7 @@ public class IOManager
         }
         else
         {
-            return getGUITextInput();
+            return getGUIMoveInput();
         }
     }
 
@@ -45,7 +46,13 @@ public class IOManager
     {
         if (outputMethod == IOMethod.SYSTEM)
         {
-            System.out.println(outputString);
+            if (outputType == OutputType.MOVE_OPTIONS) {
+                System.out.println("Valid moves include: " + outputString);
+            } else if (outputType == OutputType.WHOSE_TURN) {
+                System.out.println(outputString + ", make a move.\n");
+            }
+            System.out.println(outputString + ".");
+            System.out.print("What move would you like to make? ");
         }
         else if (outputMethod == IOMethod.GUI)
         {
@@ -71,5 +78,5 @@ enum IOMethod
 
 enum OutputType
 {
-    MESSAGE, GAMESTATE, MOVE_OPTIONS
+    MESSAGE, GAMESTATE, MOVE_OPTIONS, WHOSE_TURN
 }
