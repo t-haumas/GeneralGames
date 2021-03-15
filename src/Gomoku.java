@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,7 @@ public class Gomoku extends Game
 	private int[][] spaces;
 	private int winner;
 	private final int winLength;
+	private int turnPlayer;
 	private ArrayList<Integer> legalMoves;
 
 	public Gomoku(int length, int winLength)
@@ -245,12 +245,6 @@ public class Gomoku extends Game
 	}
 
 	@Override
-	public int getMaxNumMovesForOnePlayer()
-	{
-		return boardLength * boardLength;
-	}
-
-	@Override
 	public int getMaxMove()
 	{
 		return boardLength * boardLength;
@@ -260,6 +254,11 @@ public class Gomoku extends Game
 	public int getNumPlayers()
 	{
 		return 2;
+	}
+
+	@Override
+	public int getTurnPlayer() {
+		return turnPlayer;
 	}
 
 	@Override

@@ -13,7 +13,6 @@ public abstract class Game implements Cloneable
 	// numPlayers should be like a final variable, I wonder if there's a way to do that.
 	
 	// Player are 1-INDEXED! First player is player 1.
-	int turnPlayer;
 	protected StringBuilder moveStringBuilder;
 
 	public Game()
@@ -33,8 +32,6 @@ public abstract class Game implements Cloneable
 	 * @return The name of the game as a string.
 	 */
 	public abstract String getName();
-
-	public abstract int getMaxNumMovesForOnePlayer();
 
 	public JPanel getPanelRepresentingThisGame()
 	{
@@ -115,7 +112,7 @@ public abstract class Game implements Cloneable
 	 */
 	public int getNextPlayer()
 	{
-		return turnPlayer == getNumPlayers() ? 1 : turnPlayer + 1;
+		return getTurnPlayer() == getNumPlayers() ? 1 : getTurnPlayer() + 1;
 	}
 	
 	/**
@@ -124,10 +121,7 @@ public abstract class Game implements Cloneable
 	 * 
 	 * @return - Number ID of the turn player. Can also return 0 if game is over.
 	 */
-	public int getTurnPlayer()
-	{
-		return turnPlayer;
-	}
+	public abstract int getTurnPlayer();
 	
 	/**
 	 * Overloaded method - this version returns legal moves for the turn player.

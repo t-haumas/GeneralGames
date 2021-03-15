@@ -13,6 +13,7 @@ public class Chopsticks extends Game
     private int gameLength;
     private final int numPlayers;
     private ArrayList<Integer> deadPeople;
+    private int turnPlayer;
 
     public Chopsticks(int numberOfPlayers, boolean handsOverflow)
     {
@@ -52,11 +53,6 @@ public class Chopsticks extends Game
         return yesOverflow ? "O" : "No-o" + "verflow Chopsticks";
     }
 
-    @Override
-    public int getMaxNumMovesForOnePlayer() {
-        return 16 * (numPlayers - 1);
-    }
-
     public int getMaxMove()
     {
         return numPlayers * 16 * (numPlayers - 1) - 1;
@@ -65,6 +61,11 @@ public class Chopsticks extends Game
     @Override
     public int getNumPlayers() {
         return numPlayers;
+    }
+
+    @Override
+    public int getTurnPlayer() {
+        return turnPlayer;
     }
 
     @Override

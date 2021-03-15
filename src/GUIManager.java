@@ -22,6 +22,8 @@ public class GUIManager {
     private boolean mainDisplayCreated;
     private final Color backgroundColor;
     private boolean initialized;
+    private String turnPlayerString;
+    private String scoreString;
 
     public GUIManager(Game game, GameManager gameManager) {
         this.game = game;
@@ -30,6 +32,8 @@ public class GUIManager {
         backgroundColor = UIManager.getColor("Panel.background");
         initialized = false;
         waitingForMoveSubmission = true;
+        scoreString = "";
+        turnPlayerString = "";
     }
 
     public void initialize() {
@@ -111,7 +115,7 @@ public class GUIManager {
         constraints.gridx = 2;
         constraints.weightx = 0.00001;
         constraints.weighty = 0.1;
-        mainPanel.add(Box.createVerticalStrut((int) (game.getPanelRepresentingThisGame().getPreferredSize().getHeight() * 1.25)), constraints);
+        mainPanel.add(Box.createVerticalStrut((int) (game.getPanelRepresentingThisGame().getPreferredSize().getHeight())), constraints);
 
         constraints.weighty = 3;
         constraints.weightx = 1;
@@ -188,7 +192,11 @@ public class GUIManager {
             else if (outputType == OutputType.MOVE_OPTIONS) {
                 updateMoveOptions(outputString);
             } else if (outputType == OutputType.WHOSE_TURN){
+                turnPlayerString = outputString + "'s turn";
                 statusLabel.setText(outputString + "'s turn");
+            } else if (outputType == OutputType.SCORE) {
+                scoreString = outputString.replaceAll("\n", "<br>");
+                statusLabel.setText("<html>" + turnPlayerString + "<br>" + scoreString + "</html>");
             } else {
                 throw new UnsupportedOperationException("output type " + outputType + " not supported yet.");
             }

@@ -4,13 +4,16 @@ public class GamePlayer
 {
 	public static void main(String[] args)
 	{
+//		try {
+			Game myGame = new Chess();
 
-		Game myGame = new Chess();
+			GameManager gameManager = new GameManager(myGame);
+			gameManager.initialize(IOMethod.GUI);
 
-		GameManager gameManager = new GameManager(myGame);
-		gameManager.initialize(IOMethod.GUI);
-
-		gameManager.playGame();
+			gameManager.playGame();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 	}
 

@@ -47,12 +47,14 @@ public class IOManager
         if (outputMethod == IOMethod.SYSTEM)
         {
             if (outputType == OutputType.MOVE_OPTIONS) {
-                System.out.println("Valid moves include: " + outputString);
+                System.out.println("Valid moves include: " + outputString + ".");
+                System.out.print("What move would you like to make? ");
             } else if (outputType == OutputType.WHOSE_TURN) {
                 System.out.println(outputString + ", make a move.\n");
+            } else {
+                System.out.println(outputString);
             }
-            System.out.println(outputString + ".");
-            System.out.print("What move would you like to make? ");
+
         }
         else if (outputMethod == IOMethod.GUI)
         {
@@ -69,14 +71,6 @@ public class IOManager
     {
         IOManager.guiManager = guiManager;
     }
+
 }
 
-enum IOMethod
-{
-    GUI, SYSTEM
-}
-
-enum OutputType
-{
-    MESSAGE, GAMESTATE, MOVE_OPTIONS, WHOSE_TURN
-}

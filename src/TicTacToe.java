@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.LinkedList;
 
 public class TicTacToe extends Game
@@ -7,6 +6,7 @@ public class TicTacToe extends Game
 	private int numMovesMade;
 	private String[][] spaces;
 	private int winner;
+	private int turnPlayer;
 
 	public TicTacToe()
 	{
@@ -221,15 +221,14 @@ public class TicTacToe extends Game
 	}
 
 	@Override
-	public String getName()
-	{
-		return "Tic-Tac-Toe";
+	public int getTurnPlayer() {
+		return turnPlayer;
 	}
 
 	@Override
-	public int getMaxNumMovesForOnePlayer()
+	public String getName()
 	{
-		return 9;
+		return "Tic-Tac-Toe";
 	}
 
 	@Override

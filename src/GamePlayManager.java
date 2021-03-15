@@ -37,6 +37,13 @@ public class GamePlayManager
 			if (preferences.outputGameAndInfo)
 			{
 				IOManager.output(game.toString(), OutputType.GAMESTATE);
+				StringBuilder scores = new StringBuilder();
+				for (int player = 1; player <= game.getNumPlayers(); player++) {
+					scores.append("Player ").append(player).append("'s score: ").append(game.getScore(player));
+					scores.append("\n");
+				}
+				scores.delete(scores.length() - 1, scores.length());
+				IOManager.output(scores.toString(), OutputType.SCORE);
 			}
 
 			// Output engine recommendation

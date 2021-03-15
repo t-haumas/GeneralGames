@@ -1,0 +1,3 @@
+public enum OutputType {
+    MESSAGE, GAMESTATE, MOVE_OPTIONS, WHOSE_TURN, SCORE;
+}

@@ -11,6 +11,7 @@ public class Mancala extends Game
 
     private final boolean custom;
     private int[] spaces;
+    private int turnPlayer;
 
     /**
      * Default constructor.
@@ -232,12 +233,6 @@ public class Mancala extends Game
     }
 
     @Override
-    public int getMaxNumMovesForOnePlayer()
-    {
-        return (TOTAL_BOARD_SPACES - 2) / 2;
-    }
-
-    @Override
     public int getMaxMove() {
         return TOTAL_BOARD_SPACES - 2;
     }
@@ -246,6 +241,11 @@ public class Mancala extends Game
     public int getNumPlayers()
     {
         return 2;
+    }
+
+    @Override
+    public int getTurnPlayer() {
+        return turnPlayer;
     }
 
     @Override

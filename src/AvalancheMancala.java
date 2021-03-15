@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,6 +5,7 @@ public class AvalancheMancala extends Game
 {
     // Don't use this if not using 14 spaces.
     private static final int[] blank14 = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private int turnPlayer;
 
     private final boolean customSpaces;
     public static int[] originalSpaces;
@@ -72,12 +72,6 @@ public class AvalancheMancala extends Game
     }
 
     @Override
-    public int getMaxNumMovesForOnePlayer()
-    {
-        return (TOTAL_NUM_SPACES - 2) / 2;
-    }
-
-    @Override
     protected void createNewGame()
     {
         spaces = new int[TOTAL_NUM_SPACES];
@@ -94,6 +88,11 @@ public class AvalancheMancala extends Game
     public int getNumPlayers()
     {
         return 2;
+    }
+
+    @Override
+    public int getTurnPlayer() {
+        return turnPlayer;
     }
 
     @Override

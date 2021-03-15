@@ -319,6 +319,9 @@ public class FileManager
                     }
                     players.add(new SafeOptimalAI(depth, dataManager));
                     valid = true;
+                } else if (input.equalsIgnoreCase("random")) {
+                    players.add(new RandomPlayer());
+                    valid = true;
                 }
                 else
                 {
@@ -373,6 +376,10 @@ public class FileManager
             else if (playerString.equals("minimax"))
             {
                 players.add(new SafeOptimalAI(playersParser.nextInt(), dataManager));
+                playersCreated++;
+            } else if (playerString.equals("random")) {
+                players.add(new RandomPlayer());
+                playersParser.next();
                 playersCreated++;
             }
             else
