@@ -148,8 +148,17 @@ public abstract class Game implements Cloneable
 
 	public void makeMove(int move)
 	{
-		if (move(move))
+		if (move(move)) {
 			moveStringBuilder.append(translateMoveIntToEnglish(move)).append(",");
+		} else {
+			JFrame errorShower = new JFrame();
+			errorShower.add(getPanelRepresentingThisGame());
+			errorShower.setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
+			System.out.println(this.moveStringBuilder.toString());
+			System.out.println(translateMoveIntToEnglish(move));
+			errorShower.setVisible(true);
+			throw new RuntimeException("Illegal move being made: " + translateMoveIntToEnglish(move));
+		}
 	}
 	
 	/**

@@ -1,19 +1,19 @@
 import java.util.LinkedList;
 
-public class MinimaxResult
+public class MinimaxResult implements Comparable<MinimaxResult>
 {
 	private int move;
-	private int score;
+	private double score;
 	private boolean know;
 	
-	public MinimaxResult(int move, int score, boolean certain)
+	public MinimaxResult(int move, double score, boolean certain)
 	{
 		this.move = move;
 		this.score = score;
 		know = certain;
 	}
 	
-	public int getScore()
+	public double getScore()
 	{
 		return score;
 	}
@@ -26,5 +26,10 @@ public class MinimaxResult
 	public boolean getCertainty()
 	{
 		return know;
+	}
+
+	@Override
+	public int compareTo(MinimaxResult o) {
+		return Double.compare(score, o.score);
 	}
 }

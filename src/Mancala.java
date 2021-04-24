@@ -252,29 +252,38 @@ public class Mancala extends Game
     public List<Integer> getLegalMoves()
     {
         ArrayList<Integer> legalMovesList = new ArrayList<>();
-        for (int i = 0; i < TOTAL_BOARD_SPACES - 1; i++)
-        {
-            if (spaces[i] != 0 && ! isScoreSpace(i))
-            {
-                if (turnPlayer == 1 && i < TOTAL_BOARD_SPACES / 2 || turnPlayer == 2 && i >= TOTAL_BOARD_SPACES / 2)
+        if (turnPlayer == 1) {
+            for (int i = 0; i < TOTAL_BOARD_SPACES / 2 - 1; i++) {
+                if (spaces[i] != 0) {
                     legalMovesList.add(i);
+                }
+            }
+        } else {
+            for (int i = TOTAL_BOARD_SPACES / 2; i < TOTAL_BOARD_SPACES - 1; i++) {
+                if (spaces[i] != 0) {
+                    legalMovesList.add(i);
+                }
             }
         }
+
         return legalMovesList;
     }
 
     @Override
     protected boolean move(int move)
     {
-        if (getLegalMoves().contains(move))
-        {
-            updateGameState(moveAbsolute(move));
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        /* TODO: commented for speed */
+//        if (getLegalMoves().contains(move))
+//        {
+//            updateGameState(moveAbsolute(move));
+//            return true;
+//        }
+//        else
+//        {
+//            return false;
+//        }
+        updateGameState(moveAbsolute(move));
+        return true;
     }
 
     @Override

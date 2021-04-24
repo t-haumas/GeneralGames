@@ -47,24 +47,28 @@ public class GamePlayManager
 			}
 
 			// Output engine recommendation
-			if (preferences.showEngineRecommendations && players.get(game.getTurnPlayer() - 1) instanceof HumanPlayer)
-			{
+			if (preferences.showEngineRecommendations > 0 && players.get(game.getTurnPlayer() - 1) instanceof HumanPlayer) {
 				long startTime = System.currentTimeMillis();
 				IOManager.output("Calculating...");
 				MinimaxResult engineResult = dataManager.getRecommendedMoveAndInfo(game, preferences.engineDepth);
 				IOManager.output("  Engine (depth " + preferences.engineDepth + ") recommends " +
 						game.translateMoveIntToEnglish(engineResult.getMove()) +
-						getGameOutcomePredictionString(engineResult) + " (" + (System.currentTimeMillis() - startTime)/100/10.0 + "s)" + ".");
+						getGameOutcomePredictionString(engineResult) + " (" + (System.currentTimeMillis() - startTime) / 100 / 10.0 + "s)" + ".");
+				if (preferences.showEngineRecommendations > 1 && players.get(game.getTurnPlayer() - 1) instanceof HumanPlayer) {
+					IOManager.output(formatMoveValuations(dataManager.getValuations()), OutputType.VALUATIONS);
+				}
+				Thaumas.playSound(12);
 			}
 
 			// Say the AI is thinking
-			if (preferences.outputGameAndInfo && players.get(game.getTurnPlayer() - 1) instanceof SafeOptimalAI)
+			Player currentPlayer = players.get(game.getTurnPlayer() - 1);
+			if (preferences.outputGameAndInfo && (currentPlayer instanceof SafeOptimalAI || currentPlayer instanceof WantToDraw))
 			{
 				IOManager.output("Player " + game.getTurnPlayer() + " is thinking.");
 			}
 			long startTime = System.currentTimeMillis();
 			int nextMove = getMove(game.getTurnPlayer() - 1);
-			if (preferences.outputGameAndInfo && players.get(game.getTurnPlayer() - 1) instanceof SafeOptimalAI)
+			if (preferences.outputGameAndInfo && (currentPlayer instanceof SafeOptimalAI || currentPlayer instanceof RandomPlayer || currentPlayer instanceof WantToDraw))
 			{
 				IOManager.output("Player " + game.getTurnPlayer() + " makes the move " + game.translateMoveIntToEnglish(nextMove) +
 						" (" + (System.currentTimeMillis() - startTime) / 100 / 10.0 + "s)" + ".");
@@ -113,9 +117,18 @@ public class GamePlayManager
 		}
 	}
 
+	private String formatMoveValuations(ArrayList<MinimaxResult> valuations) {
+		StringBuilder valuationsString = new StringBuilder();
+		for (MinimaxResult moveAndScore : valuations) {
+			valuationsString.append(game.translateMoveIntToEnglish(moveAndScore.getMove())).append(": ").append(moveAndScore.getScore()).append("\n");
+		}
+
+		return valuationsString.toString();
+	}
+
 	private String getGameOutcomePredictionString(MinimaxResult result)
 	{
-		int score = result.getScore();
+		double score = result.getScore();
 		String output = "";
 		output += result.getCertainty() ? ", and knows you will be " : ", and thinks you will be ";
 		if (score > 0) {

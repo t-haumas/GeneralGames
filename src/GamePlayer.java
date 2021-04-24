@@ -5,12 +5,16 @@ public class GamePlayer
 	public static void main(String[] args)
 	{
 //		try {
-			Game myGame = new Chess();
+		Game myGame = new Mancala();
 
-			GameManager gameManager = new GameManager(myGame);
-			gameManager.initialize(IOMethod.GUI);
+		myGame.makeMove(myGame.translateMoveStringToInt("A6"));
+		myGame.makeMove(myGame.translateMoveStringToInt("B6"));
 
-			gameManager.playGame();
+
+		GameManager gameManager = new GameManager(myGame);
+		gameManager.initialize(IOMethod.GUI);
+
+		gameManager.playGame();
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}

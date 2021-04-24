@@ -16,6 +16,8 @@ public class GUIManager {
     private JComboBox<String> moveOptions;
     private JLabel statusLabel;
     private JButton moveButton;
+    private JTextArea valuationsTextArea;
+    private JScrollPane valuations;
 
     private JScrollPane gameStateScrollPane;
 
@@ -39,6 +41,11 @@ public class GUIManager {
     public void initialize() {
         createMainDisplay();
         setUpMessages();
+        setUpValuations();
+
+        JTabbedPane tabPane = new JTabbedPane();
+        tabPane.addTab("Messages", messages);
+        tabPane.addTab("Engine valuations", valuations);
 
         gameStateScrollPane = new JScrollPane(game.getPanelRepresentingThisGame());
         gameStateScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -54,15 +61,15 @@ public class GUIManager {
         constraints.ipady = 10;
         mainPanel.add(gameStateScrollPane, constraints);
 
-        constraints.weightx = 2;
-        constraints.gridx = 1;
-        mainPanel.add(messages, constraints);
+//        constraints.weightx = 2;
+//        constraints.gridx = 1;
+//        mainPanel.add(messages, constraints);
 
         updateGameStateScrollPane();
 
         moveOptionsPanel = new JPanel();
         moveOptionsPanel.setLayout(new BoxLayout(moveOptionsPanel, BoxLayout.X_AXIS));
-        moveOptionsPanel.setBackground(new Color(200, 220, 250));
+//        moveOptionsPanel.setBackground(new Color(200, 220, 250));
         moveOptions = new JComboBox<>();
         moveOptions.addKeyListener(new KeyListener() {
             @Override
@@ -123,10 +130,29 @@ public class GUIManager {
         constraints.gridy = 2;
         constraints.gridwidth = 4;
         constraints.gridheight = 1;
-        mainPanel.add(messages, constraints);
+        mainPanel.add(tabPane, constraints);
 
 
         initialized = true;
+    }
+
+    private void setUpValuations() {
+        valuationsTextArea = new JTextArea();
+        valuationsTextArea.setEditable(false);
+        valuationsTextArea.setBackground(backgroundColor);
+        String defaultFont = new JLabel().getFont().getFontName();
+        valuationsTextArea.setFont(new Font(defaultFont, Font.PLAIN, 18));
+
+        JPanel valuationsPanel = new JPanel();
+        valuationsPanel.setLayout(new BorderLayout());
+        valuationsPanel.add(valuationsTextArea, BorderLayout.CENTER);
+        valuationsPanel.setBackground(backgroundColor);
+
+        valuations = new JScrollPane(valuationsPanel);
+        valuations.setBorder(BorderFactory.createEmptyBorder());
+        valuations.getVerticalScrollBar().setUnitIncrement(10);
+        valuations.getHorizontalScrollBar().setUnitIncrement(10);
+        valuations.setBackground(backgroundColor);
     }
 
     private void makeMove() {
@@ -197,6 +223,8 @@ public class GUIManager {
             } else if (outputType == OutputType.SCORE) {
                 scoreString = outputString.replaceAll("\n", "<br>");
                 statusLabel.setText("<html>" + turnPlayerString + "<br>" + scoreString + "</html>");
+            } else if (outputType == OutputType.VALUATIONS) {
+                valuationsTextArea.setText(outputString);
             } else {
                 throw new UnsupportedOperationException("output type " + outputType + " not supported yet.");
             }

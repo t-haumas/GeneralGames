@@ -1,6 +1,4 @@
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class GameDataManager
 {
@@ -8,12 +6,14 @@ public class GameDataManager
     private GameManager mainManager;
     private final TreeMap<String, GameInfo> knownDeterminedLines;
     private int numDiscoveredLines;
+    private ArrayList<MinimaxResult> valuations;
 
     public GameDataManager(GameManager mainManager)
     {
         this.mainManager = mainManager;
         knownDeterminedLines = new TreeMap<>();
         engines = new TreeMap<>();
+        valuations = new ArrayList<>();
     }
 
     public TreeMap<String,GameInfo> getDeterminedLinesTreeMap()
@@ -58,7 +58,8 @@ public class GameDataManager
 
     public MinimaxResult getRecommendedMoveAndInfo(Game game, int depth)
     {
-        return getEngine(depth).getSafestMoveAndInfo(game);
+        valuations = new ArrayList<>(getEngine(depth).getMoveValuations(game));
+        return Collections.max(valuations);
     }
 
     private Minimaxer getEngine(int depth)
@@ -98,5 +99,9 @@ public class GameDataManager
         }
 
         return shortLines;
+    }
+
+    public ArrayList<MinimaxResult> getValuations() {
+        return valuations;
     }
 }

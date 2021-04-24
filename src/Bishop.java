@@ -1,12 +1,21 @@
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bishop extends ChessPiece {
 
-    public Bishop(ChessColor color, ChessPiece[][] board) {
+    private int x;
+    private int y;
+
+    public Bishop(ChessColor color, ChessPiece[][] board, int x, int y) {
         super(color, board);
+        this.x = x;
+        this.y = y;
     }
 
     @Override
     public ChessPiece clone(ChessPiece[][] board) {
-        return new Bishop(color, board);
+        return new Bishop(color, board, x, y);
     }
 
     @Override
@@ -28,8 +37,93 @@ public class Bishop extends ChessPiece {
     }
 
     @Override
+    public List<Integer> getMovesThisPieceCanMake() {
+        ArrayList<Integer> moves = new ArrayList<>();
+
+        // Check diagonals
+        //  Check top right diagonal
+        Point myPosition = new Point(x, y);
+        Point checkingPoint = new Point(myPosition);
+        checkingPoint.translate(1, 1);
+        for (; checkingPoint.x < 8 && checkingPoint.y < 8; checkingPoint.translate(1, 1)) {
+            if (board[checkingPoint.x][checkingPoint.y] == null) {
+                moves.add(Chess.convertToMove(x, y, checkingPoint.x, checkingPoint.y));
+            }
+            else  {
+                if (board[checkingPoint.x][checkingPoint.y].getColor() != this.color){
+                    moves.add(Chess.convertToMove(x, y, checkingPoint.x, checkingPoint.y));
+                }
+                break;
+            }
+        }
+
+        //  Check top left diagonal
+        checkingPoint.setLocation(myPosition);
+        checkingPoint.translate(-1, 1);
+        for (; checkingPoint.x >= 0 && checkingPoint.y < 8; checkingPoint.translate(-1, 1)) {
+            if (board[checkingPoint.x][checkingPoint.y] == null) {
+                moves.add(Chess.convertToMove(x, y, checkingPoint.x, checkingPoint.y));
+            }
+            else  {
+                if (board[checkingPoint.x][checkingPoint.y].getColor() != this.color){
+                    moves.add(Chess.convertToMove(x, y, checkingPoint.x, checkingPoint.y));
+                }
+                break;
+            }
+        }
+
+        //  Check bottom right diagonal
+        checkingPoint.setLocation(myPosition);
+        checkingPoint.translate(1, -1);
+        for (; checkingPoint.x < 8 && checkingPoint.y >= 0; checkingPoint.translate(1, -1)) {
+            if (board[checkingPoint.x][checkingPoint.y] == null) {
+                moves.add(Chess.convertToMove(x, y, checkingPoint.x, checkingPoint.y));
+            }
+            else  {
+                if (board[checkingPoint.x][checkingPoint.y].getColor() != this.color){
+                    moves.add(Chess.convertToMove(x, y, checkingPoint.x, checkingPoint.y));
+                }
+                break;
+            }
+        }
+
+        //  Check bottom left diagonal
+        checkingPoint.setLocation(myPosition);
+        checkingPoint.translate(-1, -1);
+        for (; checkingPoint.x >= 0 && checkingPoint.y >= 0; checkingPoint.translate(-1, -1)) {
+            if (board[checkingPoint.x][checkingPoint.y] == null) {
+                moves.add(Chess.convertToMove(x, y, checkingPoint.x, checkingPoint.y));
+            }
+            else  {
+                if (board[checkingPoint.x][checkingPoint.y].getColor() != this.color){
+                    moves.add(Chess.convertToMove(x, y, checkingPoint.x, checkingPoint.y));
+                }
+                break;
+            }
+        }
+
+        return moves;
+    }
+
+    @Override
+    public void moveTo(int x2, int y2) {
+        x = x2;
+        y = y2;
+    }
+
+    @Override
     public int getValue() {
         return 3;
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
     }
 
     @Override

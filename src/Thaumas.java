@@ -11,7 +11,20 @@ public class Thaumas {
 
     public static void playSine(double hz, double duration, double amplitude)
     {
-        StdAudio.play(StdAudio.note(hz, duration, amplitude));
+        StdAudio.play(fadeOut(StdAudio.note(hz, duration, amplitude), 0.05));
+    }
+
+    private static double[] fadeOut(double[] note, double duration) {
+        int numSamplesToFade = (int)(StdAudio.SAMPLE_RATE * duration);
+        double multiplier = 1;
+        double increment = 1.0 / numSamplesToFade;
+        multiplier -= increment;
+        for (int i = note.length - numSamplesToFade; i < note.length; i++) {
+            note[i] *= multiplier;
+            multiplier -= increment;
+        }
+
+        return note;
     }
 
     public static void setStartHz(double newStartHz)
@@ -30,100 +43,86 @@ public class Thaumas {
         playSine(startHz * 1.25, 0.2, amplitude);
     }
 
-    public static void playSound(int style)
-    {
-        switch (style)
-        {
-            case 1:
-                playSine(startHz, 0.2, 0.5);
-                playSine(startHz * 1.25, 0.3, 0.5);
-                break;
-            case 2:
-                playSine(startHz, 0.15, 0.5);
-                playSine(startHz * 1.25, 0.15, 0.5);
-                playSine(startHz * 1.5, 0.15, 0.5);
-                break;
-            case 3:
-                playSine(startHz, 0.15, 0.5);
-                playSine(startHz * 1.1875, 0.15, 0.5);
-                playSine(startHz * 1.5, 0.15, 0.5);
-                break;
-            case 4:
-                playSine(startHz, 0.1, 0.5);
-                playSine(startHz * 1.25, 0.1, 0.5);
-                playSine(startHz * 1.5, 0.1, 0.5);
-                playSine(startHz * 1.75, 0.1, 0.5);
-                break;
-            case 5:
-                playSine(startHz, 0.1, 0.5);
-                playSine(startHz * 1.1875, 0.1, 0.5);
-                playSine(startHz * 1.5, 0.1, 0.5);
-                playSine(startHz * 1.75, 0.1, 0.5);
-                break;
-            case 6:
-                playSine(startHz, 0.1, 0.5);
-                playSine(startHz * 1.25, 0.1, 0.5);
-                playSine(startHz * 1.5, 0.1, 0.5);
-                playSine(startHz * 2, 0.1, 0.5);
-                playSine(startHz * 1.5, 0.1, 0.5);
-                playSine(startHz * 1.25, 0.1, 0.5);
-                playSine(startHz, 0.1, 0.5);
-                break;
-            default:
-                playSine(startHz, 0.5, 0.5);
-                break;
-        }
-    }
-
-
 //    public static void playSound(int style)
 //    {
-//        /*
-//        1: +3-3, 2: -3+3, 3:
-//         */
-//        int startHz = 300;
-//        StringBuilder base5 = new StringBuilder();
-//
-//        while (style > 5)
+//        switch (style)
 //        {
-//            int remainder = style % 5;
-//            style /=  5;
-//            base5.insert(0, remainder);
+//            case 1:
+//                playSine(startHz, 0.2, 0.5);
+//                playSine(startHz * 1.25, 0.3, 0.5);
+//                break;
+//            case 2:
+//                playSine(startHz, 0.15, 0.5);
+//                playSine(startHz * 1.25, 0.15, 0.5);
+//                playSine(startHz * 1.5, 0.15, 0.5);
+//                break;
+//            case 3:
+//                playSine(startHz, 0.15, 0.5);
+//                playSine(startHz * 1.1875, 0.15, 0.5);
+//                playSine(startHz * 1.5, 0.15, 0.5);
+//                break;
+//            case 4:
+//                playSine(startHz, 0.1, 0.5);
+//                playSine(startHz * 1.25, 0.1, 0.5);
+//                playSine(startHz * 1.5, 0.1, 0.5);
+//                playSine(startHz * 1.75, 0.1, 0.5);
+//                break;
+//            case 5:
+//                playSine(startHz, 0.1, 0.5);
+//                playSine(startHz * 1.1875, 0.1, 0.5);
+//                playSine(startHz * 1.5, 0.1, 0.5);
+//                playSine(startHz * 1.75, 0.1, 0.5);
+//                break;
+//            case 6:
+//                playSine(startHz, 0.1, 0.5);
+//                playSine(startHz * 1.25, 0.1, 0.5);
+//                playSine(startHz * 1.5, 0.1, 0.5);
+//                playSine(startHz * 2, 0.1, 0.5);
+//                playSine(startHz * 1.5, 0.1, 0.5);
+//                playSine(startHz * 1.25, 0.1, 0.5);
+//                playSine(startHz, 0.1, 0.5);
+//                break;
+//            default:
+//                playSine(startHz, 0.5, 0.5);
+//                break;
 //        }
-//        base5.insert(0, style);
-//        base5.insert(0, "0");
-//        base5.insert(0, "0");
-//        base5.insert(0, "0");
-//
-//        int firstInterval = Integer.parseInt(Character.toString(base5.charAt(base5.length() - 1)));
-//        int secondInterval = Integer.parseInt(Character.toString(base5.charAt(base5.length() - 2)));
-//        int thirdInterval = Integer.parseInt(Character.toString(base5.charAt(base5.length() - 3)));
-//
-//        StdAudio.play(faded(StdAudio.note(startHz, 0.15, 0.5)));
-//        StdAudio.play(faded(StdAudio.note(startHz * Math.pow(2, (firstInterval / 12.0)), 0.15, 0.5)));
-//        StdAudio.play(faded(StdAudio.note(startHz * Math.pow(2, (firstInterval / 12.0)) * Math.pow(2, (secondInterval / 12.0)), 0.15, 0.5)));
-//        StdAudio.play(faded(StdAudio.note(startHz * Math.pow(2, (firstInterval / 12.0)) * Math.pow(2, (secondInterval / 12.0)) * Math.pow(2, (thirdInterval / 12.0)), 0.15, 0.5)));
 //    }
+
+
+    public static void playSound(int style)
+    {
+        double fadeDuration = 0.1;
+        /*
+        1: +3-3, 2: -3+3, 3:
+         */
+        int startHz = 300;
+        StringBuilder base5 = new StringBuilder();
+
+        while (style > 5)
+        {
+            int remainder = style % 5;
+            style /=  5;
+            base5.insert(0, remainder);
+        }
+        base5.insert(0, style);
+        base5.insert(0, "0");
+        base5.insert(0, "0");
+        base5.insert(0, "0");
+
+        int firstInterval = Integer.parseInt(Character.toString(base5.charAt(base5.length() - 1)));
+        int secondInterval = Integer.parseInt(Character.toString(base5.charAt(base5.length() - 2)));
+        int thirdInterval = Integer.parseInt(Character.toString(base5.charAt(base5.length() - 3)));
+
+        StdAudio.play(fadeOut(StdAudio.note(startHz, 0.15, 0.5), fadeDuration));
+        StdAudio.play(fadeOut(StdAudio.note(startHz * Math.pow(2, (firstInterval / 12.0)), 0.15, 0.5), fadeDuration));
+        StdAudio.play(fadeOut(StdAudio.note(startHz * Math.pow(2, (firstInterval / 12.0)) * Math.pow(2, (secondInterval / 12.0)), 0.15, 0.5), fadeDuration));
+        StdAudio.play(fadeOut(StdAudio.note(startHz * Math.pow(2, (firstInterval / 12.0)) * Math.pow(2, (secondInterval / 12.0)) * Math.pow(2, (thirdInterval / 12.0)), 0.15, 0.5), fadeDuration));
+    }
 
     // Do this if not all audio is playing before the program exits I guess.
     public static void closeAudio()
     {
         StdAudio.close();
-    }
-
-
-
-
-
-
-
-    private static double[] faded(double[] fadingArray)
-    {
-//        for (int i = 0; i < 10; i++) {
-//            fadingArray[i] *= i / 10.0;
-//            fadingArray[fadingArray.length - 11 + i] *= (10 - i) / 10.0;
-//        }
-        return fadingArray;
     }
 
     public static void showErrorWindow(String errorMessage)

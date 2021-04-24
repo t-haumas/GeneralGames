@@ -1,9 +1,12 @@
 import java.awt.*;
+import java.util.List;
 
 public abstract class ChessPiece {
 
     protected ChessColor color;
     protected ChessPiece[][] board;
+
+
 
     private ChessPiece() {}
 
@@ -11,10 +14,6 @@ public abstract class ChessPiece {
         this.color = color;
         this.board = board;
     }
-
-//    public void moveTo(Point newPosition) {
-//        myPosition.setLocation(newPosition);
-//    }
 
     public ChessColor getColor() {
         return color;
@@ -32,10 +31,18 @@ public abstract class ChessPiece {
      */
     public abstract boolean canMakeMove(int x1, int y1, int x2, int y2);
 
+    public abstract List<Integer> getMovesThisPieceCanMake();
+
+    public abstract void moveTo(int x2, int y2);
+
     /**
      * @return Point value of this piece.
      */
     public abstract int getValue();
+
+    public abstract int getX();
+
+    public abstract int getY();
 }
 
 enum ChessColor {WHITE, BLACK}

@@ -18,7 +18,7 @@ public class FileManager
     boolean outputGameAndInfo;
     boolean outputMovestring;
     boolean playSoundAfterMoves;
-    boolean showEngineRecommendations;
+    int showEngineRecommendations;
     private boolean showWinPositionsGUI;
     int engineDepth;
 
@@ -43,7 +43,7 @@ public class FileManager
         outputGameAndInfo = true;
         outputMovestring = false;
         playSoundAfterMoves = false;
-        showEngineRecommendations = false;
+        showEngineRecommendations = 0;
         showWinPositionsGUI = false;
         engineDepth = 1;
 
@@ -166,7 +166,7 @@ public class FileManager
             configFileWriter.write("Print the game and info as it is played: " + outputGameAndInfo + "\n");
             configFileWriter.write("Print movestring after games are finished: " + outputMovestring + "\n");
             configFileWriter.write("Play a sound after moves are made: " + playSoundAfterMoves + "\n");
-            configFileWriter.write("Show engine recommendations: " + showEngineRecommendations + "\n");
+            configFileWriter.write("Show engine recommendations (1) or show all move valuations (2): " + showEngineRecommendations + "\n");
             configFileWriter.write("Engine depth: " + engineDepth + "\n");
             configFileWriter.write("Show lines helper during games: " + showWinPositionsGUI + "\n");
             StringBuilder playersStringBuilder = new StringBuilder();
@@ -231,7 +231,9 @@ public class FileManager
             lineScan = new Scanner(fileScan.nextLine());
             lineScan.useDelimiter(": ");
             lineScan.next();
-            showEngineRecommendations = lineScan.nextBoolean();
+            try {
+                showEngineRecommendations = lineScan.nextInt();
+            } catch (InputMismatchException ignored) {}
 
             //	Extract engineDepth
             lineScan = new Scanner(fileScan.nextLine());
@@ -319,6 +321,23 @@ public class FileManager
                     }
                     players.add(new SafeOptimalAI(depth, dataManager));
                     valid = true;
+                }
+                else if (input.equalsIgnoreCase("stalemater"))
+                {
+                    int depth = engineDepth;
+                    boolean validInt = false;
+                    while (! validInt) {
+                        System.out.print("What is player " + i + "'s maximum depth? ");
+                        input = IOManager.getNextInput();
+                        try {
+                            depth = Integer.parseInt(input);
+                            validInt = true;
+                        } catch (InputMismatchException e) {
+                            System.err.println("You have to put an integer.");
+                        }
+                    }
+                    players.add(new WantToDraw(depth));
+                    valid = true;
                 } else if (input.equalsIgnoreCase("random")) {
                     players.add(new RandomPlayer());
                     valid = true;
@@ -376,6 +395,11 @@ public class FileManager
             else if (playerString.equals("minimax"))
             {
                 players.add(new SafeOptimalAI(playersParser.nextInt(), dataManager));
+                playersCreated++;
+            }
+            else if (playerString.equals("stalemater"))
+            {
+                players.add(new WantToDraw(playersParser.nextInt()));
                 playersCreated++;
             } else if (playerString.equals("random")) {
                 players.add(new RandomPlayer());
